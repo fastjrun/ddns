@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.fastjrun</groupId>
+	<artifactId>ddns-aliyun</artifactId>
+	<version>1.0</version>
+	<name>ddns-aliyun</name>
+	<dependencies>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>${commons-logging.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>${junit.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>${quartz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-alidns</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>2.3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>applicationContext.xml</include>
+					<include>package.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>applicationContext-*.xml</include>
+					<include>*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.5.3</version>
+				<configuration>
+					<!-- not append assembly id in release file name -->
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptors>
+						<descriptor>target/classes/package.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<finalName>ddns</finalName>
+	</build>
+	<profiles>
+		<profile>
+			<id>nocheck</id>
+			<properties>
+				<skipTests>true</skipTests>
+				<checkstyle.skip>true</checkstyle.skip>
+				<license.skip>true</license.skip>
+				<notice.skip>true</notice.skip>
+				<versions.skip>true</versions.skip>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 本地环境,默认是挡板，个人可以更新；其他环境配置对开发工程师无用 -->
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- /src/main/resources/applicationContext.xml -->
+				<system.configDir>config</system.configDir>
+				<!-- /src/main/config/log4j.xml -->
+				<mainlog>com.fastjrun.ddns</mainlog>
+				<level.mainlog>debug</level.mainlog>
+				<!-- src/main/bin/startup.sh -->
+				<jvm.ms>128M</jvm.ms>
+				<jvm.mx>128M</jvm.mx>
+				<!-- src/main/config/ddns.properties -->
+                <shutdown.port>2050</shutdown.port>
+                <scheduler.threadCount>5</scheduler.threadCount>
+                <executorService.corePoolSize>5</executorService.corePoolSize>
+                <executorService.maxPoolSize>10</executorService.maxPoolSize>
+                <executorService.queueCapacity>25</executorService.queueCapacity>
+                <executorService.keepAliveSeconds>3000</executorService.keepAliveSeconds>
+                <checkIPTask.configDomain>fastjrun.com</checkIPTask.configDomain>
+                <checkIPTask.rR>test</checkIPTask.rR>
+                <checkIPTask.recordId>rwerw</checkIPTask.recordId>
+                <checkIPTask.cronExpression>0 * * * * ?</checkIPTask.cronExpression>
+                <!-- src/main/config/ddns.properties -->
+                <aliYunUtil.accessKeyId>wrwerew</aliYunUtil.accessKeyId>
+                <aliYunUtil.accessKeySecret>werwerwer</aliYunUtil.accessKeySecret>
+                <ipUtilWithR6300V2.adminIP>http://192.168.1.1</ipUtilWithR6300V2.adminIP>
+                <ipUtilWithR6300V2.login_authorization>dsfdsfsd==</ipUtilWithR6300V2.login_authorization>
+                <!-- src/main/resources/package.xml windows:dir;linux/unix:tar.gz -->
+				<assembly.format>dir</assembly.format>
+			</properties>
+		</profile>
+        <profile>
+            <!-- 本地环境,默认是挡板，个人可以更新；其他环境配置对开发工程师无用 -->
+            <id>prod</id>
+            <properties>
+                <!-- /src/main/resources/applicationContext.xml -->
+                <system.configDir>config</system.configDir>
+                <!-- /src/main/config/log4j.xml -->
+                <mainlog>com.fastjrun.ddns</mainlog>
+                <level.mainlog>debug</level.mainlog>
+                <!-- src/main/bin/startup.sh -->
+                <jvm.ms>128M</jvm.ms>
+                <jvm.mx>128M</jvm.mx>
+                <!-- src/main/config/ddns.properties -->
+                <shutdown.port>2050</shutdown.port>
+                <scheduler.threadCount>5</scheduler.threadCount>
+                <executorService.corePoolSize>5</executorService.corePoolSize>
+                <executorService.maxPoolSize>10</executorService.maxPoolSize>
+                <executorService.queueCapacity>25</executorService.queueCapacity>
+                <executorService.keepAliveSeconds>3000</executorService.keepAliveSeconds>
+                <checkIPTask.configDomain>fastjrun.com</checkIPTask.configDomain>
+                <checkIPTask.rR>test</checkIPTask.rR>
+                <checkIPTask.recordId>rwerw</checkIPTask.recordId>
+                <checkIPTask.cronExpression>0 * * * * ?</checkIPTask.cronExpression>
+                <!-- src/main/config/ddns.properties -->
+                <aliYunUtil.accessKeyId>wrwerew</aliYunUtil.accessKeyId>
+                <aliYunUtil.accessKeySecret>werwerwer</aliYunUtil.accessKeySecret>
+                <ipUtilWithR6300V2.adminIP>http://192.168.1.1</ipUtilWithR6300V2.adminIP>
+                <ipUtilWithR6300V2.login_authorization>dsfdsfsd==</ipUtilWithR6300V2.login_authorization>
+                <!-- src/main/resources/package.xml windows:dir;linux/unix:tar.gz -->
+                <assembly.format>tar.gz</assembly.format>
+            </properties>
+        </profile>
+	</profiles>
+	<properties>
+        <junit.version>4.12</junit.version>
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<commons-logging.version>1.2</commons-logging.version>
+		<springframework.version>4.2.4.RELEASE</springframework.version>
+		<jsoup.version>1.8.2</jsoup.version>
+		<quartz.version>2.2.1</quartz.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+</project>
