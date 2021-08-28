@@ -1,33 +1,20 @@
 package com.fastjrun.ddns;
 
-import org.quartz.Scheduler;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.fastjrun.ddns.task.CheckIPTask;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import java.util.Date;
+
+@SpringBootApplication
+@EnableScheduling
 public class BatchInit {
 
-    public static final String SPRING_CONFIG_FILE = "applicationContext.xml";
-
-    public static final String COMMAND_START_DEFAULT = "startup";
-
-    public void startup(String command) throws Exception {
-        ApplicationContext appContext = new ClassPathXmlApplicationContext(SPRING_CONFIG_FILE);
-        Scheduler scheduler = (Scheduler) appContext.getBean("scheduler");
-
-        if (COMMAND_START_DEFAULT.equalsIgnoreCase(command)) {
-            scheduler.start();
-        } 
-    }
-
-    public static void main(String[] args) {
-        try {
-            String command = "startup";
-            BatchInit batch = new BatchInit();
-            batch.startup(command);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
+  public static void main(String[] args) {
+    new SpringApplicationBuilder(BatchInit.class).bannerMode(Banner.Mode.CONSOLE).run(args);
+  }
 }

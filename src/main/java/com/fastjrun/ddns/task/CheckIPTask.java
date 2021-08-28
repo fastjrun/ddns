@@ -1,41 +1,27 @@
 package com.fastjrun.ddns.task;
 
+import com.fastjrun.ddns.config.AppConfig;
+import com.fastjrun.ddns.service.DomainRecordService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
-import com.fastjrun.ddns.service.DomainRecordService;
+@Component
+public class CheckIPTask {
 
-public class CheckIPTask {    
+  protected final Log log = LogFactory.getLog(this.getClass());
 
-    protected final Log log = LogFactory.getLog(this.getClass());
+  @Autowired AppConfig appConfig;
 
-    @Value("${checkIPTask.configDomain}")
-    String configDomain;
-    @Value("${checkIPTask.recordId}")
-    String recordId;
-    @Value("${checkIPTask.rR}")
-    String rR;
-    @Autowired
-    DomainRecordService domainRecordService;
+  @Autowired DomainRecordService domainRecordService;
 
-    public void process() {
-        log.debug("checkIP start");
-        domainRecordService.updateIPforDomainRecord(configDomain, recordId, rR);
-        log.debug("checkIP end");
-
-    }    
-
-
-    public static void main(String[] args) {
-        ApplicationContext appContext = new ClassPathXmlApplicationContext(
-                "applicationContext.xml");
-        CheckIPTask checkIPTask = (CheckIPTask) appContext.getBean("checkIPTask");
-        checkIPTask.process();
-        ((ClassPathXmlApplicationContext) appContext).close();
-    }
-
+  public void process() {
+    log.debug("checkIP start");
+    domainRecordService.updateIPforDomainRecord(
+        appConfig.getCheckIPTask().getConfigDomain(),
+        appConfig.getCheckIPTask().getRecordId(),
+        appConfig.getCheckIPTask().getRR());
+    log.debug("checkIP end");
+  }
 }
