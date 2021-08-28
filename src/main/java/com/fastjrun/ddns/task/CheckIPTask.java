@@ -18,10 +18,12 @@ public class CheckIPTask {
 
   public void process() {
     log.debug("checkIP start");
-    domainRecordService.updateIPforDomainRecord(
-        appConfig.getCheckIPTask().getConfigDomain(),
-        appConfig.getCheckIPTask().getRecordId(),
-        appConfig.getCheckIPTask().getRR());
+    String recordId = domainRecordService.queryDomainRecordId();
+    if ("".equals(recordId)) {
+      domainRecordService.addDomainRecord();
+    } else {
+      domainRecordService.updateIPforDomainRecord(recordId);
+    }
     log.debug("checkIP end");
   }
 }

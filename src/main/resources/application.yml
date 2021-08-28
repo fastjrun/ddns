@@ -18,7 +18,6 @@ ddns:
     accessKeySecret: secret
   checkIPTask:
     configDomain: fastjrun.com
-    recordId: test
     rR: test
     cron: 0 * * * * ?
 

@@ -7,8 +7,6 @@ public class CheckIPTaskConfig {
 
   private String configDomain;
 
-  private String recordId;
-
   private String rR;
 
   private String cron;

@@ -1,6 +1,5 @@
 package com.fastjrun.util.impl;
 
-import com.fastjrun.util.AbstractIPUtil;
 import com.fastjrun.util.IpUtil;
 
 import java.io.BufferedReader;
@@ -11,7 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 
-public class IPUtilWithIPCUIYINGFENG extends AbstractIPUtil implements IpUtil {
+public class IPUtilWithIPCUIYINGFENG implements IpUtil {
 
   @Override
   public String locateWanIP() {
@@ -23,7 +22,7 @@ public class IPUtilWithIPCUIYINGFENG extends AbstractIPUtil implements IpUtil {
       InputStreamReader isReader = new InputStreamReader(ins, Charset.defaultCharset());
       BufferedReader bReader = new BufferedReader(isReader);
       StringBuilder webContent = new StringBuilder();
-      String str ;
+      String str;
       while ((str = bReader.readLine()) != null) {
         webContent.append(str);
       }
