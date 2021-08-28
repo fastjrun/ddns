@@ -9,8 +9,8 @@
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/0911/200431_2ec8abf9_639443.png "概念和设计思路")  
 
 
-###使用方法
-####阿里云购买域名，并开通access Key服务
+### 使用方法
+#### 阿里云购买域名，并开通access Key服务
 ![#ddns-aliyun](http://git.oschina.net/uploads/images/2016/0911/200351_e8e22925_639443.png "如何开通access Key服务")  
 
 #### 下载源码并编译
