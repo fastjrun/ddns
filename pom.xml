@@ -68,6 +68,11 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${okhttp.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -203,6 +208,7 @@
         <junit.version>4.12</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.version>1.7.12</slf4j.version>
+		<okhttp.version>3.10.0</okhttp.version>
 		<commons-logging.version>1.2</commons-logging.version>
 		<springframework.version>4.2.4.RELEASE</springframework.version>
 		<jsoup.version>1.8.2</jsoup.version>
