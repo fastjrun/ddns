@@ -23,7 +23,7 @@ public class IPUtilWithIPCUIYINGFENG extends AbstractIPUtil implements IpUtil {
       InputStreamReader isReader = new InputStreamReader(ins, Charset.defaultCharset());
       BufferedReader bReader = new BufferedReader(isReader);
       StringBuilder webContent = new StringBuilder();
-      String str = null;
+      String str ;
       while ((str = bReader.readLine()) != null) {
         webContent.append(str);
       }
