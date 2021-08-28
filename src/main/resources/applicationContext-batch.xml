@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
     <bean id="executorService"
         class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean">
@@ -28,7 +28,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="checkIPTask" class="com.fastjrun.ddns.task.CheckIPTask">
     </bean>
 
@@ -43,13 +43,9 @@
         <property name="jobDetail" ref="checkIPTaskJob" />
         <property name="cronExpression" value="${checkIPTask.cronExpression}" />
     </bean>
-    
-    <bean id="ipUtil" class="com.fastjrun.util.impl.IPUtilWithIP138"/>
-    
-    <bean id="ipUtilWithR6300V2" class="com.fastjrun.util.impl.IPUtilWithR6300V2">
-        <property name="adminIP" value="${ipUtilWithR6300V2.adminIP}" />
-        <property name="login_authorization" value="${ipUtilWithR6300V2.login_authorization}" />
-    </bean>
+
+    <bean id="ipUtil" class="com.fastjrun.util.impl.IPUtilWithIPCN"/>
+
     <bean id="aliYunUtil" class="com.fastjrun.util.AliYunUtil"
         init-method="init">
         <property name="accessKeyId" value="${aliYunUtil.accessKeyId}" />

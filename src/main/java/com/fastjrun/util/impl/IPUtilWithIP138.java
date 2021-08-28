@@ -9,7 +9,7 @@ import java.net.URLConnection;
 
 import com.fastjrun.util.AbstractIPUtil;
 import com.fastjrun.util.IpUtil;
-
+@Deprecated
 public class IPUtilWithIP138 extends AbstractIPUtil implements IpUtil {
 
     @Override
