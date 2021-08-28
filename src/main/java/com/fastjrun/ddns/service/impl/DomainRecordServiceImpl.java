@@ -6,7 +6,6 @@ import com.fastjrun.util.IpUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("domainRecordService")
@@ -17,21 +16,8 @@ public class DomainRecordServiceImpl implements DomainRecordService {
 
   @Autowired AliYunUtil aliYunUtil;
 
-  @Value("#{appConfig.checkIPTask.configDomain}")
-  String configDomain;
-
-  @Value("#{appConfig.checkIPTask.RR}")
-  String rR;
-
   @Override
-  public String addDomainRecord() {
-    String ipWan = ipUtil.locateWanIP();
-    log.debug("ipWan=" + ipWan);
-    return aliYunUtil.addDomainRecord(configDomain, ipWan, rR, "A");
-  }
-
-  @Override
-  public void updateIPforDomainRecord(String domainRecordId) {
+  public boolean updateIPforDomainRecord(String configDomain, String rR) {
     String ipDomain = ipUtil.getIPByDomain(rR + "." + configDomain);
     log.debug("ipDomain=" + ipDomain);
 
@@ -39,14 +25,15 @@ public class DomainRecordServiceImpl implements DomainRecordService {
     log.debug("ipWan=" + ipWan);
 
     if (!ipWan.equals(ipDomain)) {
-      aliYunUtil.updateATypeDomainRecord(domainRecordId, ipWan, rR);
+      String recordId = aliYunUtil.queryATypeDomainRecordId(configDomain, rR);
+      log.debug("recordId=" + recordId);
+
+      if ("".equals(recordId)) {
+        aliYunUtil.addDomainRecord(configDomain, ipWan, rR, "A");
+      } else {
+        aliYunUtil.updateATypeDomainRecord(recordId, ipWan, rR);
+      }
     }
-  }
-
-  @Override
-  public String queryDomainRecordId() {
-    log.debug("queryDomainRecordId");
-
-    return aliYunUtil.queryATypeDomainRecordId(configDomain, rR);
+    return true;
   }
 }
