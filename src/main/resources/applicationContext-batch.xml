@@ -44,7 +44,7 @@
         <property name="cronExpression" value="${checkIPTask.cronExpression}" />
     </bean>
 
-    <bean id="ipUtil" class="com.fastjrun.util.impl.IPUtilWithIPCN"/>
+    <bean id="ipUtil" class="com.fastjrun.util.impl.IPUtilWithIPCUIYINGFENG"/>
 
     <bean id="aliYunUtil" class="com.fastjrun.util.AliYunUtil"
         init-method="init">
