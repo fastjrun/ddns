@@ -17,9 +17,9 @@
 ####工程根目录下执行，生成部署包（目录格式或者tar.gz格式）
 ```
 #构建、打包windows下环境
-mvn clean pakcage -Pnocheck,local
+mvn clean package -Pnocheck,local
 #构建、打包linux下环境
-mvn clean pakcage -Pnocheck,prod
+mvn clean package -Pnocheck,prod
 ```
 ####将部署包部署在指定在服务器，解压后调整ddns.properties文件中配置
 
