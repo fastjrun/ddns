@@ -13,11 +13,12 @@ logging:
       springframework:
         boot: WARN
 ddns:
+  locateIPUrl: "http://ip.cuiyingfeng.com"
   aliyun:
-    accessKeyId: hello
-    accessKeySecret: secret
+    accessKeyId: xxx
+    accessKeySecret: yyy
   checkIPTask:
-    configDomain: fastjrun.com
+    configDomain: pi4k8s.cn
     rR: test
     cron: 0 * * * * ?
 

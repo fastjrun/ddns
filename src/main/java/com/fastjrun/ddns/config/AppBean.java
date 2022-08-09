@@ -1,9 +1,8 @@
 package com.fastjrun.ddns.config;
 
-import com.fastjrun.ddns.task.CheckIPTask;
 import com.fastjrun.util.AliYunUtil;
 import com.fastjrun.util.IpUtil;
-import com.fastjrun.util.impl.IPUtilWithIPCUIYINGFENG;
+import com.fastjrun.util.impl.IPUtilWithNetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,8 @@ public class AppBean {
 
     @Bean
     public IpUtil ipUtil(){
-        IpUtil ipUtil = new IPUtilWithIPCUIYINGFENG();
+        IPUtilWithNetService ipUtil = new IPUtilWithNetService();
+        ipUtil.setLocateIPUrl(appConfig.getLocateIPUrl());
         return ipUtil;
     }
 

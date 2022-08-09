@@ -1,6 +1,7 @@
 package com.fastjrun.util.impl;
 
 import com.fastjrun.util.IpUtil;
+import lombok.Data;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,14 +10,16 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
+@Data
+public class IPUtilWithNetService implements IpUtil {
 
-public class IPUtilWithIPCUIYINGFENG implements IpUtil {
+  private String locateIPUrl;
 
   @Override
   public String locateWanIP() {
     InputStream ins = null;
     try {
-      URL url = new URL("http://ip.cuiyingfeng.com");
+      URL url = new URL(this.locateIPUrl);
       URLConnection con = url.openConnection();
       ins = con.getInputStream();
       InputStreamReader isReader = new InputStreamReader(ins, Charset.defaultCharset());
