@@ -3,80 +3,154 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fastjrun</groupId>
-    <artifactId>ddns-aliyun</artifactId>
-    <version>3.0</version>
-    <name>ddns-aliyun</name>
+    <artifactId>ddns</artifactId>
+    <version>3.0-SNAPSHOT</version>
+    <name>ddns</name>
+    <packaging>pom</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.3.RELEASE</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dns-cache-manipulator</artifactId>
-			<version>1.8.0-RC1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-alidns</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>2.3.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.dynamic-sql</groupId>
+                <artifactId>mybatis-dynamic-sql</artifactId>
+                <version>${mybatis-dynamic-sql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fastjrun.codeg.apiworld</groupId>
+                <artifactId>apiworld-sdkg-provider</artifactId>
+                <version>${apiworld-sdkg.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax.validation.version}</version>
+            </dependency>
+            <!-- swagger -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-ui</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dns-cache-manipulator</artifactId>
+                <version>${dns-cache-manipulator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-alidns</artifactId>
+                <version>${aliyun-java-sdk-alidns.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun-java-sdk-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fastjrun.codeg</groupId>
+                <artifactId>base-sdkg-sb2-test</artifactId>
+                <scope>test</scope>
+                <version>${sdkg.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>ddns-base</module>
+        <module>ddns-bundle</module>
+        <module>ddns-biz</module>
+        <module>ddns-server</module>
+
+       <!-- mock -->
+        <module>ddns-bundle-mock</module>
+        <module>ddns-mock-server</module>
+    </modules>
+
     <build>
-        <finalName>ddns</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>application.yml</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>true</executable>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.fastjrun.codeg</groupId>
+                    <artifactId>sdkg-plugin</artifactId>
+                    <version>${sdkg.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.fastjrun.codeg.apiworld</groupId>
+                            <artifactId>apiworld-sdkg-generator</artifactId>
+                            <version>${apiworld-sdkg.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.mybatis.generator</groupId>
+                    <artifactId>mybatis-generator-maven-plugin</artifactId>
+                    <version>${mybatis-generator-maven-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.h2database</groupId>
+                            <artifactId>h2</artifactId>
+                            <version>${h2.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${maven-clean-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <profiles>
         <profile>
             <id>nocheck</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <skipTests>true</skipTests>
                 <checkstyle.skip>true</checkstyle.skip>
@@ -87,6 +161,25 @@
         </profile>
     </profiles>
     <properties>
+        <bundleFiles>ddns.xml</bundleFiles>
+        <packagePrefix>com.fastjrun.ddns</packagePrefix>
+        <company>快嘉</company>
+        <sdkg.version>4.1.1</sdkg.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <mybatis-generator-maven-plugin.version>1.4.1</mybatis-generator-maven-plugin.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <mybatis.version>3.5.7</mybatis.version>
+        <mybatis-spring.version>1.3.0</mybatis-spring.version>
+        <pagehelper.version>5.1.8</pagehelper.version>
+        <apiworld-sdkg.version>1.4</apiworld-sdkg.version>
+        <swagger2.version>3.0.0</swagger2.version>
+        <knife4j.version>2.0.9</knife4j.version>
+        <javax.validation.version>2.0.1.Final</javax.validation.version>
+        <mybatis-dynamic-sql.version>1.4.0</mybatis-dynamic-sql.version>
+        <dns-cache-manipulator.version>1.8.0-RC1</dns-cache-manipulator.version>
+        <aliyun-java-sdk-alidns.version>2.0.1</aliyun-java-sdk-alidns.version>
+        <aliyun-java-sdk-core.version>2.3.8</aliyun-java-sdk-core.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

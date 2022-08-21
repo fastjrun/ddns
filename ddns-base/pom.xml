@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.fastjrun</groupId>
+    <artifactId>ddns-base</artifactId>
+    <parent>
+        <groupId>com.fastjrun</groupId>
+        <artifactId>ddns</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.dynamic-sql</groupId>
+            <artifactId>mybatis-dynamic-sql</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/java</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <useDefaultExcludes>true</useDefaultExcludes>
+                            <!--对这些文件不清理-->
+                            <excludes>
+                                <exclude>*.info</exclude>
+                            </excludes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Generate MyBatis Artifacts</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <configurationFile>src/main/resources/mybatis-generator.xml</configurationFile>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <sqlScript>classpath:ddns.sql</sqlScript>
+                            <overwrite>true</overwrite>
+                            <jdbcDriver>org.h2.Driver</jdbcDriver>
+                            <jdbcURL>jdbc:h2:mem:ddns;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
+                            </jdbcURL>
+                            <jdbcUserId>sa</jdbcUserId>
+                            <jdbcPassword>sa</jdbcPassword>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+        <!--  Java接口和实体类  -->
+        <targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+    </properties>
+</project>

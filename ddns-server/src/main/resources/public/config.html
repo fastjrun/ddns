@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+    <title>配置</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <style>
+        .modal p { margin: 1em 0; }
+
+        .add_form.modal {
+            border-radius: 0;
+            line-height: 18px;
+            padding: 0;
+            font-family: "Lucida Grande", Verdana, sans-serif;
+        }
+
+        .add_form.modal p { padding: 20px 30px; border-bottom: 1px solid #ddd; margin: 0;
+            background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #eee),color-stop(1, #fff));
+            overflow: hidden;
+        }
+        .add_form.modal p:last-child { border: none; }
+        .add_form.modal p label { float: left; font-weight: bold; color: #333; font-size: 13px; width: 110px; line-height: 22px; }
+        .add_form.modal p input[type="text"],
+        .add_form.modal p input[type="submit"]		{
+            font: normal 12px/18px "Lucida Grande", Verdana;
+            padding: 3px;
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+
+        #msg {
+            margin: 10px;
+            padding: 30px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+            background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.getJSON('/sys', function(json) {
+                var tr=[];
+                var data=json.data
+                for (var i = 0; i < data.length; i++) {
+                    tr.push('<tr>');
+                    tr.push('<td>' + data[i].propName + '</td>');
+                    tr.push('<td>' + data[i].propValue + '</td>');
+                    tr.push('<td>' + data[i].propDesc + '</td>');
+                    tr.push('<td><button class=\'edit\'>Edit</button></td>');
+                    tr.push('</tr>');
+                }
+                $('table').append($(tr.join('')));
+            });
+
+            $(document).delegate('.edit', 'click', function() {
+                var parent = $(this).parent().parent();
+
+                var propValue = parent.children("td:nth-child(2)");
+                var buttons = parent.children("td:nth-child(4)");
+
+                propValue.html("<input type='text' id='txtPropValue' value='" + propValue.html() + "'/>");
+                buttons.html("<button id='save'>Save</button>");
+            });
+
+            $(document).delegate('#save', 'click', function() {
+                var parent = $(this).parent().parent();
+
+                var propName = parent.children("td:nth-child(1)");
+                var propValue = parent.children("td:nth-child(2)");
+                var buttons = parent.children("td:nth-child(4)");
+
+                $.ajax({
+                    type: "PUT",
+                    contentType: "application/json; charset=utf-8",
+                    url: "sys",
+                    data: JSON.stringify({'propName' : propName.html(), 'propValue' : propValue.children("input[type=text]").val()}),
+                    cache: false,
+                    success: function() {
+                        propValue.html(propValue.children("input[type=text]").val());
+                        buttons.html("<button class='edit' propName='" + propName.val() + "'>Edit</button>");
+                    },
+                    error: function() {
+                        $('#err').html('<span style=\'color:red; font-weight: bold; font-size: 30px;\'>Error updating').fadeIn().fadeOut(4000, function() {
+                            $(this).remove();
+                        });
+                    }
+                });
+            });
+
+            $(document).delegate('.restart', 'click', function() {
+                if (confirm('Do you really want to restart?')) {
+                    var parent = $(this).parent().parent();
+                    $.ajax({
+                        type: "POST",
+                        url: "/app/restart",
+                        cache: false,
+                        success: function() {
+                            $('#err').html('<span style=\'color:green; font-weight: bold; font-size: 30px;\'>Restart OK').fadeIn().fadeOut(4000, function() {
+                                $(this).remove();
+                            });
+                        },
+                        error: function() {
+                            $('#err').html('<span style=\'color:red; font-weight: bold; font-size: 30px;\'>Error restart').fadeIn().fadeOut(4000, function() {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                }
+            });
+
+            $(document).delegate('.stop', 'click', function() {
+                if (confirm('Do you really want to stop?')) {
+                    var parent = $(this).parent().parent();
+                    $.ajax({
+                        type: "POST",
+                        url: "/app/stop",
+                        cache: false,
+                        success: function() {
+                            $('#err').html('<span style=\'color:green; font-weight: bold; font-size: 30px;\'>Stop OK').fadeIn().fadeOut(4000, function() {
+                                $(this).remove();
+                            });
+                        },
+                        error: function() {
+                            $('#err').html('<span style=\'color:red; font-weight: bold; font-size: 30px;\'>Error stop').fadeIn().fadeOut(4000, function() {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<h2>配置</h2>
+
+<table border="1" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>属性名</th>
+        <th>属性值</th>
+        <th>属性描述</th>
+        <th>操作</th>
+    </tr>
+</table>
+<p><button class='restart'>重启</button><button class='stop'>停止</button></p>
+</body>
+</html>

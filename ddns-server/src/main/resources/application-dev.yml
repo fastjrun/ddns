@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    # 连接池的配置信息
+    # 初始化大小，最小，最大
+    initial-size: 5
+    min-idle: 5
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    url: jdbc:h2:file:~/ddns-h2;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+    schema: classpath*:ddns.sql
+    initialization-mode: never
+    data: classpath*:ddns-init.sql
+
+  h2:
+    console:
+      enabled: true
+
+mybatis:
+  configuration:
+    log-impl: "org.apache.ibatis.logging.stdout.StdOutImpl"
+logging:
+  level:
+    root: WARN
+    com:
+      fastjrun:
+        ddns: DEBUG
+    org:
+      springframework:
+        boot: WARN

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- !!!! Driver Class Path !!!! -->
+    <context id="context" targetRuntime="MyBatis3DynamicSql">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+
+        <commentGenerator>
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+        <!-- !!!! Database Configurations !!!! -->
+        <jdbcConnection driverClass="org.h2.Driver"
+                        connectionURL="jdbc:h2:mem:ddns;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE"
+                        userId="sa"
+                        password="sa"/>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!-- !!!! Model Configurations !!!! -->
+        <javaModelGenerator targetPackage="${packagePrefix}.entity"
+                            targetProject="${targetJavaProject}">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <javaClientGenerator targetPackage="${packagePrefix}.mapper"
+                             targetProject="${targetJavaProject}" type="ANNOTATEDMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+        <!-- !!!! Table Configurations !!!! -->
+        <!-- !!!! Table Configurations !!!! -->
+        <table tableName="ddns_sys"/>
+        <table tableName="ddns_record"/>
+    </context>
+</generatorConfiguration>
