@@ -3,7 +3,7 @@ node {
         git branch: 'master', url: 'https://gitee.com/fastjrun/ddns.git'
     }
     stage('package ddns') {
-        sh 'build.sh package_server'
+        sh 'sh build.sh package_server'
     }
     stage('docker prepare') {
         dir('output') {
