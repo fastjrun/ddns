@@ -33,9 +33,17 @@ docker run -itd --name ddns -p 8080:8080 pi4k8s/ddns:3.0
 ```
 #### 使用
 - 配置阿里云api参数 
+
 http:{ip}:8080/config.html
-  ![输入图片说明](static/images/config.png)
+
+![输入图片说明](static/images/config.png)  
+
+点击停止按钮可以停止调度任务。点击重启按钮可以以新设置的参数重新启动调度任务。
 
 - 配置ddns记录
+
 http:{ip}:8080/ddns.html
-  ![输入图片说明](static/images/ddns.png)
+
+![输入图片说明](static/images/ddns.png)
+
+通过本配置页可添加多条ddns记录
