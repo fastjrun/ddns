@@ -10,8 +10,8 @@
 
 
 ### 使用方法
-#### 阿里云购买域名，并开通access Key服务
-![#ddns-aliyun](static/images/aliyun.png "如何开通access Key服务")
+#### 阿里云购买域名，并开通access Key服务 
+![输入图片说明](static/images/aliyun.png)
 
 #### 下载源码并编译
 ```
@@ -34,8 +34,8 @@ docker run -itd --name ddns -p 8080:8080 pi4k8s/ddns:3.0
 #### 使用
 - 配置阿里云api参数 
 http:{ip}:8080/config.html
-![#ddns-config](static/images/config.png "")
+  ![输入图片说明](static/images/config.png)
 
 - 配置ddns记录
 http:{ip}:8080/ddns.html
-![#ddns-ddns](static/images/ddns.png "")
+  ![输入图片说明](static/images/ddns.png)
