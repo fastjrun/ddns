@@ -26,6 +26,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public void restart() {
         intervalTaskRegistrar.destroy();
+        cacheService.refresh();
         AppBean appBean = cacheService.cache();
         SchedulingRunnable task = new SchedulingRunnable("checkIPTask", "process");
         intervalTaskRegistrar.addIntervalTask(task, 1000 * 60 * appBean.getInterval());

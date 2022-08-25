@@ -2,6 +2,7 @@ package com.fastjrun.ddns.service.impl;
 
 import com.fastjrun.client.AliYunClient;
 import com.fastjrun.client.IpClient;
+import com.fastjrun.client.common.AliyunRecord;
 import com.fastjrun.client.impl.IPClientWithNetService;
 import com.fastjrun.ddns.config.AppBean;
 import com.fastjrun.ddns.dao.DdnsRecordDao;
@@ -38,12 +39,21 @@ public class DomainRecordServiceImpl implements DomainRecordService {
             String ipDomain = ipClient.getIPByDomain(var.getRecord() + "." + appBean.getConfigDomain());
             log.debug("ddns={},ipDomain={}", var.getRecord() + "." + appBean.getConfigDomain(), ipDomain);
             if (!ipWan.equals(ipDomain)) {
-                String recordId = aliYunClient.queryATypeDomainRecordId(appBean.getConfigDomain(), var.getRecord());
-                log.debug("recordId={}", recordId);
-                if ("".equals(recordId)) {
-                    aliYunClient.addDomainRecord(appBean.getConfigDomain(), ipWan, var.getRecord(), "A");
+                AliyunRecord aliyunRecord = aliYunClient.queryATypeDomainRecordId(appBean.getConfigDomain(), var.getRecord());
+                String recordId = aliyunRecord.getRecordId();
+                String value = aliyunRecord.getValue();
+                log.debug("recordId={},value={}", recordId, value);
+                if (value == null) {
+                    recordId = aliYunClient.addDomainRecord(appBean.getConfigDomain(), ipWan, var.getRecord(), "A");
+                    log.debug("add record ok for recordId:{}", recordId);
                 } else {
-                    aliYunClient.updateATypeDomainRecord(recordId, ipWan, var.getRecord());
+                    if (value.equals(ipWan)) {
+                        log.debug("no need to change");
+                    } else {
+                        aliYunClient.updateATypeDomainRecord(recordId, ipWan, var.getRecord());
+                        log.debug("update record ok for recordId:{}", recordId);
+                    }
+
                 }
             }
         });

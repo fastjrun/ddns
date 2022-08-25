@@ -6,9 +6,12 @@ import com.aliyuncs.alidns.model.v20150109.*;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.fastjrun.client.common.AliyunRecord;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
+@Slf4j
 public class AliYunClient {
   IAcsClient client = null;
 
@@ -59,26 +62,29 @@ public class AliYunClient {
         return true;
       }
     } catch (ClientException e) {
-      e.printStackTrace();
+      log.error("",e);
     }
     return false;
   }
 
-  public String queryATypeDomainRecordId(String domainName, String rR) {
+  public AliyunRecord queryATypeDomainRecordId(String domainName, String rR) {
+    AliyunRecord aliyunRecord=new AliyunRecord();
+    aliyunRecord.setDomainName(domainName);
+    aliyunRecord.setRR(rR);
     DescribeDomainRecordsRequest describeDomainRecordsRequest = new DescribeDomainRecordsRequest();
     describeDomainRecordsRequest.setDomainName(domainName);
     describeDomainRecordsRequest.setRRKeyWord(rR);
-    String recordId = "";
     try {
       DescribeDomainRecordsResponse describeDomainRecordsResponse =
           client.getAcsResponse(describeDomainRecordsRequest);
       if (describeDomainRecordsResponse.getDomainRecords() != null
           && describeDomainRecordsResponse.getDomainRecords().size() > 0) {
-        recordId = describeDomainRecordsResponse.getDomainRecords().get(0).getRecordId();
+        aliyunRecord.setRecordId(describeDomainRecordsResponse.getDomainRecords().get(0).getRecordId());
+        aliyunRecord.setValue(describeDomainRecordsResponse.getDomainRecords().get(0).getValue());
       }
     } catch (ClientException e) {
-      e.printStackTrace();
+      log.error("",e);
     }
-    return recordId;
+    return aliyunRecord;
   }
 }

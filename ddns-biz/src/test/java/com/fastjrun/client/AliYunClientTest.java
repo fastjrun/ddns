@@ -40,7 +40,7 @@ public class AliYunClientTest {
     public void testQueryATypeDomainRecordId() {
         String configDomain = "fastjrun.com";
         String rR = "test22";
-        String recordId = aliYunClient.queryATypeDomainRecordId(configDomain, rR);
+        String recordId = aliYunClient.queryATypeDomainRecordId(configDomain, rR).getRecordId();
         System.out.println(recordId);
     }
 }

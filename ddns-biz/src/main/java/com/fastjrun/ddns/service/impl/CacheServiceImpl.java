@@ -7,6 +7,7 @@ import com.fastjrun.ddns.dao.DdnsSysDao;
 import com.fastjrun.ddns.entity.DdnsSys;
 import com.fastjrun.ddns.service.CacheService;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("cacheService")
+@Slf4j
 public class CacheServiceImpl implements CacheService {
 
     @Resource
