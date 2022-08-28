@@ -21,13 +21,15 @@ sh build.sh package_server
 ```
 output目录下生成ddns.jar
 #### 部署
-将ddns.jar和ddns.sh部署到服务器同一目录下，比如/opt
+##### 原生部署
+将ddns.jar和ddns.sh部署到服务器同一目录下，比如/opt/ddns
 ```
-cd /opt
-sh ddns.sh
+cd /opt/ddns
+# 采用后台部署方式
+INIT=always nohup sh ddns.sh &
 ```
-#### docker部署
-不想看源码的可以直接用这个docker镜像pi4k8s/ddns:3.0，这个镜像不仅可以在一般x86服务器使用，也可以在树莓派4B上直接使用
+##### 容器化部署
+也可以通过docker镜像pi4k8s/ddns:3.0进行部署，这个镜像不仅可以在一般x86服务器使用，也可以在树莓派4B上直接使用
 ```
 docker run -itd --name ddns -p 8080:8080 pi4k8s/ddns:3.0
 ```
@@ -46,4 +48,4 @@ http:{ip}:8080/ddns.html
 
 ![输入图片说明](static/images/ddns.png)
 
-通过本配置页可添加多条ddns记录
+通过本页面可添加ddns记录，添加完记录后需要等一段时间才能生效，这里支持配置多条ddns记录。
