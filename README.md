@@ -49,3 +49,22 @@ http:{ip}:8080/ddns.html
 ![输入图片说明](static/images/ddns.png)
 
 通过本页面可添加ddns记录，添加完记录后需要等一段时间才能生效，这里支持配置多条ddns记录。
+
+- IP变更记录
+
+http:{ip}:8080/ip.html
+
+![输入图片说明](static/images/ip.png)
+
+通过本页面可查看公网IP变更记录，可删除指定记录。另外后台启动了一个默认清理任务，每天执行一次，最多保留50条最新记录。
+
+### 关于数据迁移
+对于3.0版本用户，如果是基于docker启动，需要考虑数据迁移
+- 从容器里cp到宿主机后，才可以删除当前容器
+- 以最新版本容器启动后，再将数据cp回容器
+- 重启容器后，通过h2的web控制台登录后新建ddns_ip_change_log表
+
+http:{ip}:8080/h2-console  
+
+![输入图片说明](static/images/h2.png)
+
