@@ -7,12 +7,14 @@ spring:
     maxActive: 20
     # 配置获取连接等待超时的时间
     maxWait: 60000
-    url: jdbc:h2:file:~/ddns-h2;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
-    username: sa
-    password: sa
+    url: jdbc:h2:mem:ddns;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
+    username: root
+    password: root
     driver-class-name: org.h2.Driver
-#    schema: classpath*:ddns.sql
-#    data: classpath*:ddns-init.sql
+    schema: classpath:ddns.sql
+    data: classpath:ddns-init.sql
+    schema-username: root
+    schema-password: root
 
 mybatis:
   configuration:

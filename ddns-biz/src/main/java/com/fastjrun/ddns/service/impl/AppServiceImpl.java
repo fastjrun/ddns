@@ -28,8 +28,10 @@ public class AppServiceImpl implements AppService {
         intervalTaskRegistrar.destroy();
         cacheService.refresh();
         AppBean appBean = cacheService.cache();
-        SchedulingRunnable task = new SchedulingRunnable("checkIPTask", "process");
-        intervalTaskRegistrar.addIntervalTask(task, 1000 * 60 * appBean.getInterval());
+        SchedulingRunnable checkIPTask = new SchedulingRunnable("checkIPTask", "process");
+        intervalTaskRegistrar.addIntervalTask(checkIPTask, 1000 * 60 * appBean.getInterval());
+        SchedulingRunnable clearIPChangeLogTask = new SchedulingRunnable("clearIPChangeLogTask", "process");
+        intervalTaskRegistrar.addIntervalTask(clearIPChangeLogTask, 1000 * 60 * 60 *24 );
 
     }
 }

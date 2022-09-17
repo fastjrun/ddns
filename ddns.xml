@@ -2,6 +2,16 @@
 <bundle xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="fastjrun-apiworld-schema.xsd">
     <packets>
+        <packet class="vo.DdnsIPVO">
+            <field name="id" dataType="Long" length="64" canBeNull="false"
+                   remark="Id"/>
+            <field name="ip" dataType="String" length="64" canBeNull="false"
+                   remark="公网IP"/>
+            <field name="createDate" dataType="java.util.Date" length="64" canBeNull="false"
+                   remark="创建时间"/>
+            <field name="updateDate" dataType="java.util.Date" length="64" canBeNull="false"
+                   remark="更新时间"/>
+        </packet>
         <packet class="vo.DdnsRecordVO">
             <field name="id" dataType="Long" length="64" canBeNull="false"
                    remark="Id"/>
@@ -34,6 +44,18 @@
         </packet>
     </packets>
     <services>
+        <service name="iPService" class="IPService">
+            <method name="list" version="" path="" method="GET"
+                    remark="IP变更记录列表">
+                <response class="vo.DdnsIPVO:List"/>
+            </method>
+            <method name="deleteById" version="" path="/{}" method="DELETE"
+                    remark="删除记录">
+                <pathVariables>
+                    <pathVariable name="id" dataType="Long" length="12" remark="ID"/>
+                </pathVariables>
+            </method>
+        </service>
         <service name="recordService" class="RecordService">
             <method name="list" version="" path="" method="GET"
                     remark="记录列表">
@@ -70,6 +92,10 @@
         </service>
     </services>
     <controllers>
+        <controller type="CustomApi" name="IPController" path="/ip"
+                    clientName="IPClient" remark="IP变更记录接口" tags="IP变更记录管理">
+            <service name="iPService" ref="iPService"/>
+        </controller>
         <controller type="CustomApi" name="RecordController" path="/record"
                     clientName="RecordClient" remark="dns记录接口" tags="dns记录管理">
             <service name="recordService" ref="recordService"/>

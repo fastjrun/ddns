@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+    <title>DDNS</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- jQuery Modal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+    <style>
+        .modal p { margin: 1em 0; }
+
+        #msg {
+            margin: 10px;
+            padding: 30px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            background: -moz-linear-gradient(top, #2e5764, #1e3d47);
+            background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.getJSON('/ip', function(json) {
+                var tr=[];
+                var data=json.data
+                for (var i = 0; i < data.length; i++) {
+                    tr.push('<tr>');
+                    tr.push('<td>' + data[i].id + '</td>');
+                    tr.push('<td>' + data[i].ip + '</td>');
+                    tr.push('<td>' + data[i].createDate + '</td>');
+                    tr.push('<td><button class=\'delete\' id=' + data[i].id + '>Delete</button></td>');
+                    tr.push('</tr>');
+                }
+                $('table').append($(tr.join('')));
+            });
+
+            $(document).delegate('.delete', 'click', function() {
+                if (confirm('Do you really want to delete record?')) {
+                    var id = $(this).attr('id');
+                    var parent = $(this).parent().parent();
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/ip/" + id,
+                        cache: false,
+                        success: function() {
+                            parent.fadeOut('slow', function() {
+                                $(this).remove();
+                            });
+                            location.reload(true)
+                        },
+                        error: function() {
+                            $('#err').html('<span style=\'color:red; font-weight: bold; font-size: 30px;\'>Error deleting record').fadeIn().fadeOut(4000, function() {
+                                $(this).remove();
+                            });
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+<h2>IP变更记录</h2>
+
+<table border="1" cellspacing="0" cellpadding="5">
+    <tr>
+        <th>Id</th>
+        <th>IP</th>
+        <th>创建时间</th>
+        <th>操作</th>
+    </tr>
+</table>
+
+</body>
+</html>

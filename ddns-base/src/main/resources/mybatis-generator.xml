@@ -35,5 +35,6 @@
         <!-- !!!! Table Configurations !!!! -->
         <table tableName="ddns_sys"/>
         <table tableName="ddns_record"/>
+        <table tableName="ddns_ip_change_log"/>
     </context>
 </generatorConfiguration>

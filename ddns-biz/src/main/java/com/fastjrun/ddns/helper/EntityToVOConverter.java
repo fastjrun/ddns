@@ -1,11 +1,22 @@
 package com.fastjrun.ddns.helper;
 
+import com.fastjrun.ddns.entity.DdnsIpChangeLog;
 import com.fastjrun.ddns.entity.DdnsRecord;
 import com.fastjrun.ddns.entity.DdnsSys;
+import com.fastjrun.ddns.vo.DdnsIPVO;
 import com.fastjrun.ddns.vo.DdnsRecordVO;
 import com.fastjrun.ddns.vo.SysVO;
 
 public class EntityToVOConverter {
+
+
+    public static DdnsIPVO convert(DdnsIpChangeLog ddnsIpChangeLog) {
+        DdnsIPVO ddnsIPVO = new DdnsIPVO();
+        ddnsIPVO.setIp(ddnsIpChangeLog.getIp());
+        ddnsIPVO.setId(ddnsIpChangeLog.getId());
+        ddnsIPVO.setCreateDate(ddnsIpChangeLog.getCreateDate());
+        return ddnsIPVO;
+    }
 
     public static DdnsRecordVO convert(DdnsRecord ddnsRecord) {
         DdnsRecordVO ddnsRecordVO = new DdnsRecordVO();

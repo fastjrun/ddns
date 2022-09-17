@@ -16,9 +16,21 @@ CREATE TABLE `ddns_sys`
 DROP TABLE IF EXISTS `ddns_record`;
 CREATE TABLE `ddns_record`
 (
-    `id`          bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '用户 ID',
-    `record`      varchar(50) NOT NULL COMMENT '用户名',
+    `id`          bigint(20)  NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `record`      varchar(50) NOT NULL COMMENT '记录',
     `create_date` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update_date` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) COMMENT ='ddns记录表';
+
+-- ----------------------------
+-- Table structure for ddns_ip_change_log
+-- ----------------------------
+DROP TABLE IF EXISTS `ddns_ip_change_log`;
+CREATE TABLE `ddns_ip_change_log`
+(
+    `id`          bigint(20)  NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `ip`      varchar(50) NOT NULL COMMENT 'IP',
+    `create_date` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) COMMENT ='IP变更记录表';
