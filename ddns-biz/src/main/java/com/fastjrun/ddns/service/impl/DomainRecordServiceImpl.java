@@ -26,101 +26,107 @@ import java.util.Optional;
 @Slf4j
 public class DomainRecordServiceImpl implements DomainRecordService {
 
-  private String latestIP;
+    private String latestIP;
 
-  @Resource DdnsRecordDao ddnsRecordDao;
+    @Resource
+    DdnsRecordDao ddnsRecordDao;
 
-  @Resource DdnsIpChangeLogDao ddnsIpChangeLogDao;
+    @Resource
+    DdnsIpChangeLogDao ddnsIpChangeLogDao;
 
-  @Resource CacheService cacheService;
+    @Resource
+    CacheService cacheService;
 
-  @Override
-  public boolean updateIPforDomainRecord() {
-    AppBean appBean = cacheService.cache();
-    IpClient ipClient = this.ipClient(appBean);
+    @Override
+    public boolean updateIPforDomainRecord() {
+        AppBean appBean = cacheService.cache();
+        IpClient ipClient = this.ipClient(appBean);
 
-    String ipWan = ipClient.locateWanIP();
-    log.debug("ipWan={}", ipWan);
-    this.refreshLastIP(ipWan);
-
-    AliYunClient aliYunClient = this.aliYunClient(appBean);
-    List<DdnsRecord> ddnsRecordList = ddnsRecordDao.select(SelectDSLCompleter.allRows());
-    ddnsRecordList.stream()
-        .forEach(
-            var -> {
-              String ipDomain =
-                  ipClient.getIPByDomain(var.getRecord() + "." + appBean.getConfigDomain());
-              log.debug(
-                  "ddns={},ipDomain={}",
-                  var.getRecord() + "." + appBean.getConfigDomain(),
-                  ipDomain);
-              if (!ipWan.equals(ipDomain)) {
-                AliyunRecord aliyunRecord =
-                    aliYunClient.queryATypeDomainRecordId(
-                        appBean.getConfigDomain(), var.getRecord());
-                String recordId = aliyunRecord.getRecordId();
-                String value = aliyunRecord.getValue();
-                log.debug("recordId={},value={}", recordId, value);
-                if (value == null) {
-                  recordId =
-                      aliYunClient.addDomainRecord(
-                          appBean.getConfigDomain(), ipWan, var.getRecord(), "A");
-                  log.debug("add record ok for recordId:{}", recordId);
-                } else {
-                  if (value.equals(ipWan)) {
-                    log.debug("no need to change");
-                  } else {
-                    aliYunClient.updateATypeDomainRecord(recordId, ipWan, var.getRecord());
-                    log.debug("update record ok for recordId:{}", recordId);
-                  }
-                }
-              }
-            });
-
-    return true;
-  }
-
-  private IpClient ipClient(AppBean appBean) {
-    IPClientWithNetService ipClient = new IPClientWithNetService();
-    ipClient.setLocateIPUrl(appBean.getLocateIPUrl());
-    return ipClient;
-  }
-
-  private AliYunClient aliYunClient(AppBean appBean) {
-    AliYunClient aliYunClient = new AliYunClient();
-    aliYunClient.setRegionId(appBean.getAliyunConfig().getRegionId());
-    aliYunClient.setAccessKeyId(appBean.getAliyunConfig().getAccessKeyId());
-    aliYunClient.setAccessKeySecret(appBean.getAliyunConfig().getAccessKeySecret());
-    aliYunClient.init();
-    return aliYunClient;
-  }
-
-  private void refreshLastIP(String ipWan) {
-    boolean isSave = true;
-    if (!StringUtils.isBlank(this.latestIP)) {
-      if (this.latestIP.equals(ipWan)) {
-        isSave = false;
-      }
-    } else {
-      Optional<DdnsIpChangeLog> optionalDdnsIpChangeLog =
-          ddnsIpChangeLogDao
-              .selectOne(c -> c.orderBy(DdnsIpChangeLogDynamicSqlSupport.id.descending()).limit(1));
-      if (optionalDdnsIpChangeLog != null && optionalDdnsIpChangeLog.isPresent()) {
-        DdnsIpChangeLog ddnsIpChangeLog= optionalDdnsIpChangeLog.get();
-        if(ddnsIpChangeLog!=null){
-          String ip = ddnsIpChangeLog.getIp();
-          if (ipWan.equals(ip)) {
-            isSave = false;
-          }
+        String ipWan = ipClient.locateWanIP();
+        log.debug("ipWan={}", ipWan);
+        if (StringUtils.isBlank(ipWan)) {
+            return false;
         }
-      }
+        this.refreshLastIP(ipWan);
+
+        AliYunClient aliYunClient = this.aliYunClient(appBean);
+        List<DdnsRecord> ddnsRecordList = ddnsRecordDao.select(SelectDSLCompleter.allRows());
+        ddnsRecordList.stream()
+                .forEach(
+                        var -> {
+                            String ipDomain =
+                                    ipClient.getIPByDomain(var.getRecord() + "." + appBean.getConfigDomain());
+                            log.debug(
+                                    "ddns={},ipDomain={}",
+                                    var.getRecord() + "." + appBean.getConfigDomain(),
+                                    ipDomain);
+                            if (!ipWan.equals(ipDomain)) {
+                                AliyunRecord aliyunRecord =
+                                        aliYunClient.queryATypeDomainRecordId(
+                                                appBean.getConfigDomain(), var.getRecord());
+                                String recordId = aliyunRecord.getRecordId();
+                                String value = aliyunRecord.getValue();
+                                log.debug("recordId={},value={}", recordId, value);
+                                if (value == null) {
+                                    recordId =
+                                            aliYunClient.addDomainRecord(
+                                                    appBean.getConfigDomain(), ipWan, var.getRecord(), "A");
+                                    log.debug("add record ok for recordId:{}", recordId);
+                                } else {
+                                    if (value.equals(ipWan)) {
+                                        log.debug("no need to change");
+                                    } else {
+                                        aliYunClient.updateATypeDomainRecord(recordId, ipWan, var.getRecord());
+                                        log.debug("update record ok for recordId:{}", recordId);
+                                    }
+                                }
+                            }
+                        });
+
+        return true;
     }
-    if (isSave) {
-      DdnsIpChangeLog ddnsIpChangeLogNew = new DdnsIpChangeLog();
-      ddnsIpChangeLogNew.setIp(ipWan);
-      ddnsIpChangeLogNew.setCreateDate(new Date());
-      ddnsIpChangeLogDao.insert(ddnsIpChangeLogNew);
+
+    private IpClient ipClient(AppBean appBean) {
+        IPClientWithNetService ipClient = new IPClientWithNetService();
+        ipClient.setLocateIPUrl(appBean.getLocateIPUrl());
+        return ipClient;
     }
-    this.latestIP = ipWan;
-  }
+
+    private AliYunClient aliYunClient(AppBean appBean) {
+        AliYunClient aliYunClient = new AliYunClient();
+        aliYunClient.setRegionId(appBean.getAliyunConfig().getRegionId());
+        aliYunClient.setAccessKeyId(appBean.getAliyunConfig().getAccessKeyId());
+        aliYunClient.setAccessKeySecret(appBean.getAliyunConfig().getAccessKeySecret());
+        aliYunClient.init();
+        return aliYunClient;
+    }
+
+    private void refreshLastIP(String ipWan) {
+        boolean isSave = true;
+        if (!StringUtils.isBlank(this.latestIP)) {
+            if (this.latestIP.equals(ipWan)) {
+                isSave = false;
+            }
+        } else {
+            Optional<DdnsIpChangeLog> optionalDdnsIpChangeLog =
+                    ddnsIpChangeLogDao
+                            .selectOne(c -> c.orderBy(DdnsIpChangeLogDynamicSqlSupport.id.descending()).limit(1));
+            if (optionalDdnsIpChangeLog != null && optionalDdnsIpChangeLog.isPresent()) {
+                DdnsIpChangeLog ddnsIpChangeLog = optionalDdnsIpChangeLog.get();
+                if (ddnsIpChangeLog != null) {
+                    String ip = ddnsIpChangeLog.getIp();
+                    if (ipWan.equals(ip)) {
+                        isSave = false;
+                    }
+                }
+            }
+        }
+        if (isSave) {
+            DdnsIpChangeLog ddnsIpChangeLogNew = new DdnsIpChangeLog();
+            ddnsIpChangeLogNew.setIp(ipWan);
+            ddnsIpChangeLogNew.setCreateDate(new Date());
+            ddnsIpChangeLogDao.insert(ddnsIpChangeLogNew);
+        }
+        this.latestIP = ipWan;
+    }
 }
