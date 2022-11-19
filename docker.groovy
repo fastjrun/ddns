@@ -12,18 +12,22 @@ node {
     }
     stage('docker build && push') {
         parallel(
-                'docker build && push': {
-                    sh 'cd output && docker build . -t pi4k8s/ddns:3.1-arm64'
-                    sh 'docker push pi4k8s/ddns:3.1-arm64'
-                },
                 'docker build && push amd64': {
-                    node('amd64') {
+                    sh 'rm -rf output'
+                    dir('output') {
+                        unstash 'tarOutput'
+                    }
+                    sh 'cd output && docker build . -t pi4k8s/ddns:3.1.1-amd64'
+                    sh 'docker push pi4k8s/ddns:3.1.1-amd64'
+                },
+                'docker build && push arm64': {
+                    node('arm64') {
                         sh 'rm -rf output'
                         dir('output') {
                             unstash 'tarOutput'
                         }
-                        sh 'cd output && docker build . -t pi4k8s/ddns:3.1-amd64'
-                        sh 'docker push pi4k8s/ddns:3.1-amd64'
+                        sh 'cd output && docker build . -t pi4k8s/ddns:3.1.1-arm64'
+                        sh 'docker push pi4k8s/ddns:3.1.1-arm64'
                     }
 
                 }
@@ -32,13 +36,13 @@ node {
     }
     stage('manifest'){
         try {
-            sh 'docker manifest rm pi4k8s/ddns:3.1'
+            sh 'docker manifest rm pi4k8s/ddns:3.1.1'
         }catch(exc){
             echo "some thing wrong"
         }
-        sh 'docker manifest create pi4k8s/ddns:3.1 pi4k8s/ddns:3.1-amd64 pi4k8s/ddns:3.1-arm64'
-        sh 'docker manifest annotate pi4k8s/ddns:3.1 pi4k8s/ddns:3.1-amd64 --os linux --arch amd64'
-        sh 'docker manifest annotate pi4k8s/ddns:3.1 pi4k8s/ddns:3.1-arm64 --os linux --arch arm64'
-        sh 'docker manifest push pi4k8s/ddns:3.1'
+        sh 'docker manifest create pi4k8s/ddns:3.1.1 pi4k8s/ddns:3.1.1-amd64 pi4k8s/ddns:3.1.1-arm64'
+        sh 'docker manifest annotate pi4k8s/ddns:3.1.1 pi4k8s/ddns:3.1.1-amd64 --os linux --arch amd64'
+        sh 'docker manifest annotate pi4k8s/ddns:3.1.1 pi4k8s/ddns:3.1.1-arm64 --os linux --arch arm64'
+        sh 'docker manifest push pi4k8s/ddns:3.1.1'
     }
 }
