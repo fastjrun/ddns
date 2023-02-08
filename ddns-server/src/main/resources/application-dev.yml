@@ -20,16 +20,3 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
-
-mybatis:
-  configuration:
-    log-impl: "org.apache.ibatis.logging.stdout.StdOutImpl"
-logging:
-  level:
-    root: WARN
-    com:
-      fastjrun:
-        ddns: DEBUG
-    org:
-      springframework:
-        boot: WARN
