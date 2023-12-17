@@ -46,7 +46,7 @@ public class CacheServiceImpl implements CacheService {
         this.appBean.setLocateIPUrl(ddnsSysMap.get(AppConfig.LOCATEIP_URL));
         this.appBean.setConfigDomain(ddnsSysMap.get(AppConfig.CONFIG_DOMAIN));
         this.appBean.setInterval(Integer.parseInt(ddnsSysMap.get(AppConfig.INTERVAL)));
-        this.appBean.setType(AppConfig.IPV6.equalsIgnoreCase(ddnsSysMap.get(AppConfig.TYPE))?AppConfig.IPV6_TYPE:AppConfig.IPV4_TYPE);
+        this.appBean.setType(ddnsSysMap.get(AppConfig.TYPE));
         AliyunConfig aliyunConfig = new AliyunConfig();
         aliyunConfig.setAccessKeyId(ddnsSysMap.get(AppConfig.ACCESSKEY_ID));
         aliyunConfig.setAccessKeySecret(ddnsSysMap.get(AppConfig.ACCESSKEY_SECRET));

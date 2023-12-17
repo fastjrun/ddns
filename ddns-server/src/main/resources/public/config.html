@@ -62,8 +62,17 @@
 
                 var propValue = parent.children("td:nth-child(2)");
                 var buttons = parent.children("td:nth-child(4)");
+                console.log(parent.children("td:nth-child(1)").html())
+                if (parent.children("td:nth-child(1)").html() === 'type'){
+                    propValue.html("<input type='text' list='appNamelist'>"+
+                        "<datalist id='appNamelist'>"+
+                        "<option value='A'>ipv4</option>"+
+                        "<option value='AAAA'>ipv6</option>"+
+                        "</datalist>");
+                }else {
+                    propValue.html("<input type='text' id='txtPropValue' value='" + propValue.html() + "'/>");
 
-                propValue.html("<input type='text' id='txtPropValue' value='" + propValue.html() + "'/>");
+                }
                 buttons.html("<button id='save'>Save</button>");
             });
 

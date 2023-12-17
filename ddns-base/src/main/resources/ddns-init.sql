@@ -3,5 +3,5 @@ VALUES ('locateIPUrl', 'http://ip.cuiyingfeng.com','公网查询服务器（参�
        ('accessKeyId', 'xxx',''),
        ('accessKeySecret', 'yyy',''),
        ('configDomain', 'pi4k8s.cn','域名'),
-       ('type', 'ipv4','解析类型（ipv6，ipv4）'),
+       ('type', 'A','解析类型（ipv6=AAAA，ipv4=A）'),
        ('interval', '5','调度间隔（分钟）');
