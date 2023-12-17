@@ -7,13 +7,13 @@ spring:
     maxActive: 20
     # 配置获取连接等待超时的时间
     maxWait: 60000
-    url: jdbc:h2:file:~/ddns-h2;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
+    url: jdbc:h2:file:/h2/ddns-h2;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
     schema: classpath*:ddns.sql
     # 生产 使用 never 测试使用 ALWAYS
-    initialization-mode: ALWAYS
+    initialization-mode: never
     data: classpath*:ddns-init.sql
 
   h2:
