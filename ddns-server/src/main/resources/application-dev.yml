@@ -12,6 +12,7 @@ spring:
     password: sa
     driver-class-name: org.h2.Driver
     schema: classpath*:ddns.sql
+    # 生产 使用 never 测试使用ALWAYS
     initialization-mode: never
     data: classpath*:ddns-init.sql
 

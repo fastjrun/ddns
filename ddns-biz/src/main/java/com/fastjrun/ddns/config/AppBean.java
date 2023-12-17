@@ -19,6 +19,7 @@ public class AppBean {
     private String locateIPUrl;
     private String configDomain;
     private Integer interval;
+    private String type;
 
     private AliyunConfig aliyunConfig;
 
