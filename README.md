@@ -34,7 +34,7 @@ INIT=always nohup sh ddns.sh &
 docker run -itd --name ddns -p 8080:8080 pi4k8s/ddns:3.0
 ```
 #### 使用
-- 配置阿里云api参数 
+- 配置参数 
 
 http:{ip}:8080/config.html
 
