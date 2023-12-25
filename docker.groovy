@@ -1,3 +1,13 @@
+parameters {
+    string(
+            description: '输入版本号',
+            name: 'version',
+            defaultValue: '4.0'
+    )
+}
+
+def version = "${params.version}"
+
 node {
     stage('git chekout') {
         git branch: 'master', url: 'https://gitee.com/fastjrun/ddns.git'
@@ -17,8 +27,8 @@ node {
                     dir('output') {
                         unstash 'tarOutput'
                     }
-                    sh 'cd output && docker build . -t pi4k8s/ddns:4.0-amd64'
-                    sh 'docker push pi4k8s/ddns:4.0-amd64'
+                    sh 'cd output && docker build . -t pi4k8s/ddns:$version-amd64'
+                    sh 'docker push pi4k8s/ddns:$version-amd64'
                 },
                 'docker build && push arm64': {
                     node('arm64') {
@@ -26,8 +36,8 @@ node {
                         dir('output') {
                             unstash 'tarOutput'
                         }
-                        sh 'cd output && docker build . -t pi4k8s/ddns:4.0-arm64'
-                        sh 'docker push pi4k8s/ddns:4.0-arm64'
+                        sh 'cd output && docker build . -t pi4k8s/ddns:$version-arm64'
+                        sh 'docker push pi4k8s/ddns:$version-arm64'
                     }
 
                 }
@@ -36,13 +46,13 @@ node {
     }
     stage('manifest'){
         try {
-            sh 'docker manifest rm pi4k8s/ddns:4.0'
+            sh 'docker manifest rm pi4k8s/ddns:$version'
         }catch(exc){
             echo "some thing wrong"
         }
-        sh 'docker manifest create pi4k8s/ddns:4.0 pi4k8s/ddns:4.0-amd64 pi4k8s/ddns:4.0-arm64'
-        sh 'docker manifest annotate pi4k8s/ddns:4.0 pi4k8s/ddns:4.0-amd64 --os linux --arch amd64'
-        sh 'docker manifest annotate pi4k8s/ddns:4.0 pi4k8s/ddns:4.0-arm64 --os linux --arch arm64'
-        sh 'docker manifest push pi4k8s/ddns:4.0'
+        sh 'docker manifest create pi4k8s/ddns:$version pi4k8s/ddns:$version-amd64 pi4k8s/ddns:$version-arm64'
+        sh 'docker manifest annotate pi4k8s/ddns:$version pi4k8s/ddns:$version-amd64 --os linux --arch amd64'
+        sh 'docker manifest annotate pi4k8s/ddns:$version pi4k8s/ddns:$version-arm64 --os linux --arch arm64'
+        sh 'docker manifest push pi4k8s/ddns:$version'
     }
 }
