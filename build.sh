@@ -7,7 +7,7 @@ mkdir -p output
 if [ "ci" = $1 ] ; then
     mvn clean compile -pl ddns-base,ddns-bundle -am -Dbdgc.skip=false
 elif [ "package_server" = $1 ] ; then
-    mvn clean package -pl ddns-server -am -Dbdgc.skip=false
+    MAVEN_OPTS="-Dfile.encoding=UTF-8" mvn clean package -pl ddns-server -am -Dbdgc.skip=false
     cp ddns-server/target/ddns.jar ./output
     cp Dockerfile ./output
     cp ddns.sh ./output
