@@ -30,7 +30,7 @@ DROP TABLE IF EXISTS `ddns_ip_change_log`;
 CREATE TABLE `ddns_ip_change_log`
 (
     `id`          bigint(20)  NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `ip`      varchar(50) NOT NULL COMMENT 'IP',
+    `ip`      varchar(200) NOT NULL COMMENT 'IP',
     `create_date` timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) COMMENT ='IP变更记录表';

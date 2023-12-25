@@ -68,3 +68,14 @@ http:{ip}:8080/h2-console
 
 ![输入图片说明](static/images/h2.png)
 
+  - ipv4 获取网址：
+    - https://ip.3322.net
+    - https://4.ipw.cn
+    - http://ip.cuiyingfeng.com
+  - ipv6 获取网址：
+    - https://v6.ip.zxinc.org/getip
+    - https://api6.ipify.org
+    - https://speed.neu6.edu.cn/getIP.php
+    - https://v6.ident.me
+    - https://6.ipw.cn
+

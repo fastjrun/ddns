@@ -47,6 +47,7 @@ public class DomainRecordServiceImpl implements DomainRecordService {
         if (StringUtils.isBlank(ipWan)) {
             return false;
         }
+
         this.refreshLastIP(ipWan);
 
         AliYunClient aliYunClient = this.aliYunClient(appBean);
@@ -70,13 +71,13 @@ public class DomainRecordServiceImpl implements DomainRecordService {
                                 if (value == null) {
                                     recordId =
                                             aliYunClient.addDomainRecord(
-                                                    appBean.getConfigDomain(), ipWan, var.getRecord(), "A");
+                                                    appBean.getConfigDomain(), ipWan, var.getRecord(), appBean.getType());
                                     log.debug("add record ok for recordId:{}", recordId);
                                 } else {
                                     if (value.equals(ipWan)) {
                                         log.debug("no need to change");
                                     } else {
-                                        aliYunClient.updateATypeDomainRecord(recordId, ipWan, var.getRecord());
+                                        aliYunClient.updateDomainRecord(recordId, ipWan, var.getRecord(), appBean.getType());
                                         log.debug("update record ok for recordId:{}", recordId);
                                     }
                                 }

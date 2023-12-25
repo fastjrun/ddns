@@ -18,4 +18,6 @@ public class AppConfig {
     public final static String ACCESSKEY_SECRET = "accessKeySecret";
     public final static String CONFIG_DOMAIN = "configDomain";
     public final static String INTERVAL = "interval";
+    public final static String TYPE = "type";
+
 }

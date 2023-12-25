@@ -5,6 +5,7 @@ import com.fastjrun.ddns.dto.SysDTO;
 import com.fastjrun.ddns.entity.DdnsSys;
 import com.fastjrun.ddns.helper.DTOToEntityConverter;
 import com.fastjrun.ddns.helper.EntityToVOConverter;
+import com.fastjrun.ddns.service.CacheService;
 import com.fastjrun.ddns.service.SysService;
 import com.fastjrun.ddns.vo.SysVO;
 import org.mybatis.dynamic.sql.select.SelectDSLCompleter;
@@ -18,12 +19,13 @@ import java.util.stream.Collectors;
 public class SysServiceImpl implements SysService {
     @Resource
     DdnsSysDao ddnsSysDao;
-
+    @Resource
+    CacheService cacheService;
     @Override
     public void save(SysDTO sysDTO) {
         DdnsSys ddnsSys = DTOToEntityConverter.convert(sysDTO);
         ddnsSysDao.updateByPrimaryKeySelective(ddnsSys);
-
+        cacheService.refresh();
     }
 
     @Override

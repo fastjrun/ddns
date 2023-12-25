@@ -1,0 +1,18 @@
+# 描述 Compose 文件的版本信息
+version: "3.8"
+
+# 定义服务，可以多个
+services:
+  ddns:
+    build: #启动服务时，先将build中指定的dockerfile打包成镜像，再运行该镜像
+      context: /share/CACHEDEV1_DATA/Public/myTools/myDev/ddns #指定上下文目录dockerfile所在目录[相对、绝对路径都可以]
+      dockerfile: Dockerfile #文件名称[在指定的context的目录下指定那个Dockerfile文件名称]
+    restart: always
+    image: ddns:1.0
+    container_name: ddns
+    network_mode: "host"
+    volumes:
+      - '/share/CACHEDEV1_DATA/Public/myTools/myDev/ddns/h2:~/h2'
+
+  
+
