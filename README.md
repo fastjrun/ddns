@@ -38,7 +38,7 @@ docker run -itd --name ddns -p 8080:8080 pi4k8s/ddns:3.0
 
 http:{ip}:8080/config.html
 
-![输入图片说明](static/images/config.png)  
+![输入图片说明](static/images/config-ipv6.png)  
 
 点击停止按钮可以停止调度任务。点击重启按钮可以以新设置的参数重新启动调度任务。
 
@@ -63,6 +63,15 @@ http:{ip}:8080/ip.html
 - 从容器里cp到宿主机后，才可以删除当前容器
 - 以最新版本容器启动后，再将数据cp回容器
 - 重启容器后，通过h2的web控制台登录后新建ddns_ip_change_log表
+
+
+3.x版本-4.0版本
+- 从容器里cp到宿主机后，才可以删除当前容器
+- 以最新版本容器启动后，再将数据cp回容器
+- 重启容器后，通过h2的web控制台在表ddns_sys插入一条记录
+`insert into `ddns_sys` VALUES('type', 'A','解析类型（ipv6=AAAA，ipv4=A）');`
+
+### 控制台
 
 http:{ip}:8080/h2-console  
 
