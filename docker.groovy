@@ -25,12 +25,14 @@ node {
     stage('docker build && push') {
         parallel(
                 'docker build && push amd64': {
-                    sh 'rm -rf output'
-                    dir('output') {
-                        unstash 'tarOutput'
+                    node('amd64') {
+                        sh 'rm -rf output'
+                        dir('output') {
+                            unstash 'tarOutput'
+                        }
+                        sh 'cd output && docker build . -t pi4k8s/ddns:$version-amd64'
+                        sh 'docker push pi4k8s/ddns:$version-amd64'
                     }
-                    sh 'cd output && docker build . -t pi4k8s/ddns:$version-amd64'
-                    sh 'docker push pi4k8s/ddns:$version-amd64'
                 },
                 'docker build && push arm64': {
                     node('arm64') {
