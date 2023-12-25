@@ -12,8 +12,10 @@ node {
     stage('git chekout') {
         git branch: 'master', url: 'https://gitee.com/fastjrun/ddns.git'
     }
-    stage('package ddns') {
-        sh 'sh build.sh package_server'
+    docker.image('maven:3.8.6-openjdk-8'){
+        stage('package') {
+            sh 'sh build.sh package_server'
+        }
     }
     stage('docker prepare') {
         dir('output') {
@@ -47,7 +49,7 @@ node {
     stage('manifest'){
         try {
             sh 'docker manifest rm pi4k8s/ddns:$version'
-        }catch(exc){
+        }catch(ignored){
             echo "some thing wrong"
         }
         sh 'docker manifest create pi4k8s/ddns:$version pi4k8s/ddns:$version-amd64 pi4k8s/ddns:$version-arm64'
