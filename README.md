@@ -69,6 +69,7 @@ http:{ip}:8080/ip.html
 - 从容器里cp到宿主机后，才可以删除当前容器
 - 以最新版本容器启动后，再将数据cp回容器
 - 重启容器后，通过h2的web控制台在表ddns_sys插入一条记录
+
 `insert into `ddns_sys` VALUES('type', 'A','解析类型（ipv6=AAAA，ipv4=A）');`
 
 ### 控制台

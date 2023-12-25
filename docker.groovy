@@ -12,7 +12,7 @@ node {
     stage('git chekout') {
         git branch: 'master', url: 'https://gitee.com/fastjrun/ddns.git'
     }
-    docker.image('maven:3.8.6-openjdk-8'){
+    docker.image('maven:3.8.6-openjdk-8').inside(""){
         stage('package') {
             sh 'sh build.sh package_server'
         }
